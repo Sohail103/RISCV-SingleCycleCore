@@ -52,3 +52,25 @@ module Instruction_Mem(clk, reset, read_address, instruction_out);
     end
 
     end
+    
+endmodule
+
+// Regsiter File
+module Reg_File(clk, reset, Regwrite, Rs1, Rs2, Rd, Write_data, read_data1, read_data2);
+
+  input clk, reset, Regwrite;
+  input [4:0] Rs1, Rs2, Rd;
+  input [31:0] Write_data;
+  output [31:0] read_data1, read_data2;
+
+  reg [31:0] Registers[31:0];
+
+  always @(posedge clk or posedge reset)
+  begin
+    if(reset) begin
+      for(k=0; k<32; k=k+1) begin
+        Registers[k] <= 32'b0;
+      end
+
+    end
+endmodule
