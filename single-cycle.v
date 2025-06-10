@@ -71,6 +71,5 @@ module Reg_File(clk, reset, Regwrite, Rs1, Rs2, Rd, Write_data, read_data1, read
       for(k=0; k<32; k=k+1) begin
         Registers[k] <= 32'b0;
       end
-
     end
 endmodule
