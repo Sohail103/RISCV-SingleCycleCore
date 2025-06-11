@@ -81,4 +81,14 @@ module Reg_File(clk, reset, Regwrite, Rs1, Rs2, Rd, Write_data, read_data1, read
 
 endmodule
 
+// Immediate Generator
+module ImmGen(Opcode, instruction, Immext);
 
+  input [6:0] Opcode;
+  input [31:0] instruction;
+  output [31:0] ImmExt;
+
+  always @(*)
+    
+
+endmodule
