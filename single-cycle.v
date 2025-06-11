@@ -62,7 +62,7 @@ module Reg_File(clk, reset, Regwrite, Rs1, Rs2, Rd, Write_data, read_data1, read
   input [4:0] Rs1, Rs2, Rd;
   input [31:0] Write_data;
   output [31:0] read_data1, read_data2;
-
+  integer k;
   reg [31:0] Registers[31:0];
 
   always @(posedge clk or posedge reset)
@@ -72,4 +72,13 @@ module Reg_File(clk, reset, Regwrite, Rs1, Rs2, Rd, Write_data, read_data1, read
         Registers[k] <= 32'b0;
       end
     end
+    else if (Regwrite) begin
+      Registers[Rd] <= Write_data;
+    end
+
+    assign read_data1 = Registers[Rs1];
+    assign read_data2 = Registers[Rs2];
+
 endmodule
+
+
