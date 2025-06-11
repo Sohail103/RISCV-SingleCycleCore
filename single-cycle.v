@@ -55,7 +55,7 @@ module Instruction_Mem(clk, reset, read_address, instruction_out);
     
 endmodule
 
-// Regsiter File
+// Register File
 module Reg_File(clk, reset, Regwrite, Rs1, Rs2, Rd, Write_data, read_data1, read_data2);
 
   input clk, reset, Regwrite;
