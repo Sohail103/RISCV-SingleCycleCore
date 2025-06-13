@@ -240,7 +240,9 @@ endmodule
 module top(clk, reset);
 
   input clk, reset;
-  wire [31:0] PC_top, instruction_top;
+  wire [31:0] PC_top, instruction_top, Rd1_top;
+  wire RegWrite_top;
+  wire [1:0] ALUOp_top;
 
   // Program counter
   Program_Counter PC(.clk(clk), .reset(reset), .PC_in(), .PC_out(PC_top));
@@ -255,7 +257,16 @@ module top(clk, reset);
   Reg_File Reg_File(.clk(clk), .reset(reset), .Regwrite(), .Rs1(instruction_top[19:15]), .Rs2(instruction_top[24:20]), .Rd(instruction_top[11:7]), .Write_data(), .read_data1(), .read_data2());
 
   // Immediate Generator
-  ImmGen ImmGen(.Opcode(), .instruction(), .ImmExt());
+  ImmGen ImmGen(.Opcode(instruction_top[6:0]), .instruction(instruction_top), .ImmExt());
 
   // Control unit
-  Control_Unit Control_Unit(.instruction(), .Branch(), .MemRead(), .MemtoReg(), .ALUOp(), .MemWrite(), .ALUSrc(), .RegWrite());
+  Control_Unit Control_Unit(.instruction(instruction_top[6:0]), .Branch(), .MemRead(), .MemtoReg(), .ALUOp(), .MemWrite(), .ALUSrc(), .RegWrite(RegWrite_top));
+
+  // ALU Control unit
+  ALU_Control ALU_Control(.ALUOp(ALUOp_top), .fun7(instruction_top[30]), .fun3(instruction_top[14:12]), .Control_out());
+
+  //ALU
+  ALU_unit ALU(.A(), .B(), .Control_in(), .ALU_Result(), .zero());
+
+  // ALU Mux
+
