@@ -234,3 +234,19 @@ module Adder(in_1, in_2, Sum_out);
   assign Sum_out = in_1 + in_2;
 
 endmodule
+
+// Instantiating all modules
+
+module top(clk, reset);
+
+  input clk, reset;
+  wire [31:0] PC_top;
+
+  // Program counter
+  Program_Counter PC(.clk(clk), .reset(reset), .PC_in(), .PC_out(PC_top));
+
+  //PC Adder
+  PCplus4 PC_Adder(.fromPC(PC_top), .NexttoPC());
+
+  //Instruction Memory
+  Instruction_Mem Inst_Memory(.clk(clk), .reset(reset), .read_address(PC_top), .instruction_out());
