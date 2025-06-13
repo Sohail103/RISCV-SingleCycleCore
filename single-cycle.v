@@ -214,3 +214,13 @@ module Mux3(sel3, A3, B3, Mux3_out);
   assign Mux3_out = (sel3==1'b0)?A3:B3;
 
 endmodule
+
+// AND Logic
+module AND_logic(branch, zero, and_out);
+
+  input branch, zero;
+  output and_out;
+
+  assign and_out = branch & zero;
+
+endmodule
