@@ -240,7 +240,7 @@ endmodule
 module top(clk, reset);
 
   input clk, reset;
-  wire [31:0] PC_top;
+  wire [31:0] PC_top, instruction_top;
 
   // Program counter
   Program_Counter PC(.clk(clk), .reset(reset), .PC_in(), .PC_out(PC_top));
@@ -250,3 +250,12 @@ module top(clk, reset);
 
   //Instruction Memory
   Instruction_Mem Inst_Memory(.clk(clk), .reset(reset), .read_address(PC_top), .instruction_out());
+
+  // Register File
+  Reg_File Reg_File(.clk(clk), .reset(reset), .Regwrite(), .Rs1(instruction_top[19:15]), .Rs2(instruction_top[24:20]), .Rd(instruction_top[11:7]), .Write_data(), .read_data1(), .read_data2());
+
+  // Immediate Generator
+  ImmGen ImmGen(.Opcode(), .instruction(), .ImmExt());
+
+  // Control unit
+  Control_Unit Control_Unit(.instruction(), .Branch(), .MemRead(), .MemtoReg(), .ALUOp(), .MemWrite(), .ALUSrc(), .RegWrite());
