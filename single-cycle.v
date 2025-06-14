@@ -82,7 +82,7 @@ module Reg_File(clk, reset, Regwrite, Rs1, Rs2, Rd, Write_data, read_data1, read
 endmodule
 
 // Immediate Generator
-module ImmGen(Opcode, instruction, Immext);
+module ImmGen(Opcode, instruction, ImmExt);
 
   input [6:0] Opcode;
   input [31:0] instruction;
@@ -125,7 +125,7 @@ module ALU_unit(A, B, Control_in, ALU_Result, zero);
   output reg zero;
   output reg [31:0] ALU_Result;
 
-  always @(Control_in or or A or B)
+  always @(Control_in or A or B)
   begin
     case(Control_in)
       4'b0000: begin zero <= 0; ALU_Result <= A & B; end
@@ -180,7 +180,7 @@ module Data_Memory(clk, reset, MemWrite, MemRead, read_address, Write_data, MemD
     end
   end
 
-  assign MemData_out = (MemRead)?D_Memory[read_address]:32'b00;
+  assign MemData_out = (MemRead)?D_Memory[read_address[5:0]]:32'b00;
 
 endmodule
 
@@ -285,6 +285,6 @@ module top(clk, reset);
   Data_Memory Data_mem(.clk(), .reset(), .MemWrite(MemWrite_top), .MemRead(MemRead_top), .read_address(address_top), .Write_data(Rd2_top), .MemData_out(Memdata_top));
 
   // Mux
-  Mux3, Memory(.sel3(MemtoReg_top), .A3(address_top), .B3(Memdata_top), .Mux3_out(WriteBack_top));
+  Mux3 Memory(.sel3(MemtoReg_top), .A3(address_top), .B3(Memdata_top), .Mux3_out(WriteBack_top));
 
 endmodule
