@@ -48,7 +48,7 @@ module Instruction_Mem(clk, reset, read_address, instruction_out);
       end
     end
     else begin
-      instruction_out <= I_Mem[read_address];
+      instruction_out <= I_Mem[read_address[5:0]];
     end
 
     end
@@ -75,9 +75,9 @@ module Reg_File(clk, reset, Regwrite, Rs1, Rs2, Rd, Write_data, read_data1, read
     else if (Regwrite) begin
       Registers[Rd] <= Write_data;
     end
-
-    assign read_data1 = Registers[Rs1];
-    assign read_data2 = Registers[Rs2];
+  end
+  assign read_data1 = Registers[Rs1];
+  assign read_data2 = Registers[Rs2];
 
 endmodule
 
