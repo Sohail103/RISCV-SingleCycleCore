@@ -100,7 +100,7 @@ module ImmGen(Opcode, instruction, ImmExt);
 endmodule
 
 //Control unit
-module Control_Unit(instruction, Branch, MemRead, MemtoReg, ALUop, MemWrite, ALUSrc, RegWrite);
+module Control_Unit(instruction, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite);
 
   input [6:0] instruction;
   output reg Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite;
