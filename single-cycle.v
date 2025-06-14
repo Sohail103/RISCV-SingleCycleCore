@@ -176,7 +176,7 @@ module Data_Memory(clk, reset, MemWrite, MemRead, read_address, Write_data, MemD
     end
     else if (MemWrite)
     begin
-      D_Memory[read_address] <= Write_data;
+      D_Memory[read_address[5:0]] <= Write_data;
     end
   end
 
@@ -279,10 +279,10 @@ module top(clk, reset);
   AND_logic AND(.branch(branch_top), .zero(zero_top), .and_out(sel2_top));
 
   // Mux
-  Mux2 Adder_mux(.sel2(), .A2(NexttoPC_top), .B2(Sum_out_top), .Mux2_out(PCin_top));
+  Mux2 Adder_mux(.sel2(sel2_top), .A2(NexttoPC_top), .B2(Sum_out_top), .Mux2_out(PCin_top));
 
   // Data Memory
-  Data_Memory Data_mem(.clk(), .reset(), .MemWrite(MemWrite_top), .MemRead(MemRead_top), .read_address(address_top), .Write_data(Rd2_top), .MemData_out(Memdata_top));
+  Data_Memory Data_mem(.clk(clk), .reset(reset), .MemWrite(MemWrite_top), .MemRead(MemRead_top), .read_address(address_top), .Write_data(Rd2_top), .MemData_out(Memdata_top));
 
   // Mux
   Mux3 Memory(.sel3(MemtoReg_top), .A3(address_top), .B3(Memdata_top), .Mux3_out(WriteBack_top));
