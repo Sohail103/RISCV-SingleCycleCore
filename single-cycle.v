@@ -240,16 +240,16 @@ endmodule
 module top(clk, reset);
 
   input clk, reset;
-  wire [31:0] PC_top, instruction_top, Rd1_top, Rd2_top, ImmExt_top, mux1_top;
-  wire RegWrite_top, ALUSrc_top;
+  wire [31:0] PC_top, instruction_top, Rd1_top, Rd2_top, ImmExt_top, mux1_top, Sum_out_top, NexttoPC_top, PCin_top;
+  wire RegWrite_top, ALUSrc_top, zero_top, branch_top, sel2_top;
   wire [1:0] ALUOp_top;
   wire [3:0] control_top;
 
   // Program counter
-  Program_Counter PC(.clk(clk), .reset(reset), .PC_in(), .PC_out(PC_top));
+  Program_Counter PC(.clk(clk), .reset(reset), .PC_in(PCin_top), .PC_out(PC_top));
 
   //PC Adder
-  PCplus4 PC_Adder(.fromPC(PC_top), .NexttoPC());
+  PCplus4 PC_Adder(.fromPC(PC_top), .NexttoPC(NexttoPC_top));
 
   //Instruction Memory
   Instruction_Mem Inst_Memory(.clk(clk), .reset(reset), .read_address(PC_top), .instruction_out());
@@ -261,7 +261,7 @@ module top(clk, reset);
   ImmGen ImmGen(.Opcode(instruction_top[6:0]), .instruction(instruction_top), .ImmExt());
 
   // Control unit
-  Control_Unit Control_Unit(.instruction(instruction_top[6:0]), .Branch(), .MemRead(), .MemtoReg(), .ALUOp(), .MemWrite(), .ALUSrc(ALUSrc_top), .RegWrite(RegWrite_top));
+  Control_Unit Control_Unit(.instruction(instruction_top[6:0]), .Branch(branch_top), .MemRead(), .MemtoReg(), .ALUOp(), .MemWrite(), .ALUSrc(ALUSrc_top), .RegWrite(RegWrite_top));
 
   // ALU Control unit
   ALU_Control ALU_Control(.ALUOp(ALUOp_top), .fun7(instruction_top[30]), .fun3(instruction_top[14:12]), .Control_out(control_top));
@@ -271,4 +271,13 @@ module top(clk, reset);
 
   // ALU Mux
   Mux1 ALU_mux(.sel1(ALUSrc_top), .A1(Rd2_top), .B1(ImmExt_top), .Mux1_out(mux1_top));
+
+  // Adder
+  Adder Adder(.in_1(PC_top), .in_2(ImmExt_top), .Sum_out(Sum_out_top));
+
+  // AND Gate
+  AND_logic AND(.branch(branch_top), .zero(zero_top), .and_out(sel2_top));
+
+  // Mux
+  Mux2(.sel2(), .A2(NexttoPC_top), .B2(Sum_out_top), .Mux2_out(PCin_top));
 
