@@ -103,8 +103,8 @@ endmodule
 module Control_Unit(instruction, Branch, MemRead, MemtoReg, ALUop, MemWrite, ALUSrc, RegWrite);
 
   input [6:0] instruction;
-  output Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite;
-  output [1:0]  ALUOp;
+  output reg Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite;
+  output reg [1:0]  ALUOp;
 
   always @(*)
   begin
@@ -125,7 +125,7 @@ module ALU_unit(A, B, Control_in, ALU_Result, zero);
   output reg zero;
   output reg [31:0] ALU_Result;
 
-  always @(Control_in, or A or B)
+  always @(Control_in or or A or B)
   begin
     case(Control_in)
       4'b0000: begin zero <= 0; ALU_Result <= A & B; end
@@ -286,3 +286,5 @@ module top(clk, reset);
 
   // Mux
   Mux3, Memory(.sel3(MemtoReg_top), .A3(address_top), .B3(Memdata_top), .Mux3_out(WriteBack_top));
+
+endmodule
